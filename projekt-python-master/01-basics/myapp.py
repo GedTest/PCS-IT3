@@ -1,5 +1,7 @@
 word = "python"
-print('Guess the word! HINT: word is a name of a fruit')
+print("Zahrajeme si takovou hru!")
+print("Uhadnete moje slovo.")
+print("NAPOVEDA: hadane slovo je programovaci jazyk!")
 
 for i in word:
     print('_', end=' ')
@@ -11,17 +13,17 @@ correct = 0
 while (chances >= 0):
     print()
 
-    guess = str(input('Enter a letter to guess: '))
+    guess = str(input("Zadejte svůj odhad: "))
 
     # Guess validation
     if not guess.isalpha():
-        print('Enter only a LETTER')
+        print("Prosim zadavejte jen pismena.")
         continue
     elif len(guess) > 1:
-        print('Enter only a SINGLE letter')
+        print("Prosim zadejte pismena po jednom.")
         continue
     elif guess in letterGuessed:
-        print('You have already guessed that letter')
+        print("Tohle pismeno jste jiz uhadli")
         continue
 
     # If letter is in word
@@ -35,7 +37,7 @@ while (chances >= 0):
     # Player lose
     if chances <= 0:
         print()
-        print('You lost! Try again..')
+        print("Prohral jsi....")
         break
 
     # Print word
