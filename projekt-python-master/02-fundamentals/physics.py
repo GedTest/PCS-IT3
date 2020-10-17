@@ -11,6 +11,8 @@ MOON_GRAVITY = 1.625  # ? měsíční gravitace
 SPEED_OF_LIGHT = 299792458  # ? rychlost světla
 SPEED_OF_SOUND = 343  # ? rychlost zvuku
 
+KAPPA = 6.67e-11
+
 ''' 
 Úkol:
 1. Doplňte správně hodnoty uvedených konstant.
@@ -32,55 +34,41 @@ ZADANI_PRVE = r'1) Jak daleko je skala, od ktere se ozvenou vratil zvuk za 1,5 s
 ZADANI_DRUHE = r'2) Zjistete frekvenci vlneni zluteho svetle ve vzduchu, vite-li jeho vlnovou delku 'u'\u03BB'' = 590nm?'
 ZADANI_TRETI = r'3) Zjistete hmotnosti Zeme a Mesice, znate-li jejich gravitacni sily, polomer Mesice = 1.72*10^6, ' \
                r'polomer Zeme = 6.378*10^6 a konstantu 'u'\U0001D718'' = 6.67*10^-11:'
-def Vypocet(zadani):
+
+arrExplanation = [r'Podle vzorce s = v * t vypocteme vzdalenost, kterou urazi zvuk tam i zpátky, tuto vzdálenost ({v*t}) vydělíme 2 a dostaneme vysledek.',
+                  r'Podle vzorce 'u'\u03BB'' = v / f odvodime => f = v / 'u'\u03BB''. Dosadime a vypocteme vysledek.',
+                  r'Ze vzorce pro vypocet grav. konstanty ''\'g\''' odvodime hmotnost.\ng = (\U0001D718 * m) / r^2   =>   m = (g * r^2) / \U0001D718\nDosadime do vzorce a vypocteme vysledky:\n']
+
+def CalcMethod(number,y,z,w1=0,w2=0):
+    '''
+    Funkce vypocte ulohu
+    '''
+    if number == 1:
+        return round((z * y) / 2, 2)
+    elif number == 2:
+        return round(z / y, 2)
+    elif number == 3:
+        arrResults = []
+        arrResults.append(format((EARTH_GRAVITY * w1**2) / KAPPA, '.3g'))
+        arrResults.append(format((MOON_GRAVITY * w2**2) / KAPPA, '.3g'))
+        return arrResults
+
+def Vypocet(zadani,counter,X,Y,Z):
     '''
     Priklady vypoctenych civceni s postupem a vysvetelnim
     '''
 
-    if zadani[0] == "1":
-        t = 1.5
-        v = SPEED_OF_SOUND
-        s = (v * t) / 2
-        print(f"Prvni zadani:\n"
-              f"-------------\n"
-              f"t={t}s\n"
-              f"v={v}m/s\n"
-              f"s=?[m]\n"
-              f"-------------\n"
-              f"podle vzorce s = v * t vypocteme vzdalenost, kterou urazi zvuk tam i zpátky\n"
-              f"tuto vzdálenost ({v*t}) vydělíme 2 a dostaneme vysledek s = {s}m.\n"
-              f"+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n\n")
-
-    elif zadani[0] == "2":
-        Lambda = 590
-        v = SPEED_OF_LIGHT
-        f = v / Lambda
-        print(f"Druhe zadani:\n"
-              f"-------------\n"
-              f"\u03BB={Lambda}m\n"
-              f"v={v}m/s\n"
-              f"f=?[Hz]\n"
-              f"-------------\n"
-              f"podle vzorce \u03BB = v / f odvodime f = v / \u03BB.\n"
-              f"Dosadime a vypocteme: f = {round(f,2)}Hz\n"
-              f"+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n\n")
-
-    elif zadani[0] == "3":
-        Rm = 1.72e6
-        Rz = 6.378e6
-        k = 6.67e-11
-
-        Mm = (MOON_GRAVITY * Rm**2) / k
-        Mz = (EARTH_GRAVITY * Rz**2) / k
-        print(f"Treti zadani\n"
-              f"-------------\n"
-              f"Rm={Rm}\n"
-              f"Rz={Rz}\n"
-              f"\U0001D718={k}\n"
-              f"Mm=?[kg] Mz=?[kg]\n"
-              f"-------------\n"
-              f"Ze vzorce pro vypocet grav. konstanty 'g' odvodime hmotnost.\n"
-              f"g = (\U0001D718 * m) / r^2   =>   m = (g * r^2) / \U0001D718\n"
-              f"Dosadime do vzorce a vypocteme vysledky:\n"
-              f"Hmotnost Zeme je {format(Mz, '.3g')}kg  |   Hmotnost Mesice je {format(Mm, '.3g')}kg.\n"
-              f"+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n\n")
+    print(zadani)
+    print(f"----------------------------------------------------------\n"
+          f"{Y['name']}={Y['value']}{Y['unit']}\n"
+          f"{Z['name']}={Z['value']}{Z['unit']}\n"
+          f"{X['name']}=?[{X['unit']}]\n"
+          f"----------------------------------------------------------\n"
+          f"{arrExplanation[counter-1]}")
+    if counter != 3:
+        X['value'] = CalcMethod(counter, Y['value'], Z['value'])
+        print(f"Vysledek je: {X['name']}={X['value']}{X['unit']}")
+    else:
+        results = CalcMethod(counter, 0, 0, Y['value'], Z['value'])
+        print(f"Hmotnost Zeme je {results[0]}{Y['unit']} a hmotnost Mesice je {results[1]}{Z['unit']}")
+    print(f"----------------------------------------------------------\n")
