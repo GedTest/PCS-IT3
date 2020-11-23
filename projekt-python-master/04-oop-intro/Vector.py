@@ -111,6 +111,20 @@ class Vector:
     def BackVector(cls):
         return cls(0, 0, -1)
 
+class Rectangle(Vector):
+    def __init__(self, x, y, z, w):
+        super().__init__(x, y, z)
+        self.w = w
+        # obdelnik XYZW
+
+    def Area(self):
+        XY = Vector(self.x, self.y, 0).Length()
+        YZ = Vector(self.z, self.w, 0).Length()
+
+        #S = a * b
+        S = (XY * YZ)
+        print("Area S = ", round(S, 2), "cm.")
+
 
 # ------------------------------------------------------------------------------------------------------------------
 #                                                 praktická část
@@ -140,3 +154,10 @@ print(vINF, "with infinity values")
 
 v2_Opposite = Vector.OppositeVector(v2)
 print("Opposite vector to", v2, " is:", v2_Opposite)
+
+a = Vector(1, 2, 0)
+b = Vector(2, 4, 0)
+
+r = Rectangle(a.x, a.y, b.x, b.y)
+
+r.Area()
