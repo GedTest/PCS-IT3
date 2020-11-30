@@ -111,6 +111,58 @@ class Vector:
     def BackVector(cls):
         return cls(0, 0, -1)
 
+    # ---------------Set/Get-Methods----------------
+    @property
+    def x(self):
+        return self.__x
+
+    @x.setter
+    def x(self, value):
+        try:
+            if value == Vector.__INF:
+                self.__x = Vector.__INF
+
+            else:
+                value = int(value)
+                self.__x = value
+
+        except ValueError:
+            raise ValueError("Zadejte pouze ciselne znaky")
+
+    @property
+    def y(self):
+        return self.__y
+
+    @y.setter
+    def y(self, value):
+        try:
+            if value == Vector.__INF:
+                self.__y = Vector.__INF
+
+            else:
+                value = int(value)
+                self.__y = value
+
+        except ValueError:
+            raise ValueError("Zadejte pouze ciselne znaky")
+
+    @property
+    def z(self):
+        return self.__z
+
+    @x.setter
+    def z(self, value):
+        try:
+            if value == Vector.__INF:
+                self.__z = Vector.__INF
+
+            else:
+                value = int(value)
+                self.__z = value
+
+        except ValueError:
+            raise ValueError("Zadejte pouze ciselne znaky")
+
 class Rectangle(Vector):
     def __init__(self, x, y, z, w):
         super().__init__(x, y, z)
@@ -124,6 +176,19 @@ class Rectangle(Vector):
         #S = a * b
         S = (XY * YZ)
         print("Area S = ", round(S, 2), "cm.")
+
+    @property
+    def w(self):
+        return self.__w
+
+    @w.setter
+    def w(self, value):
+        try:
+            value = int(value)
+            self.__w = value
+
+        except ValueError:
+            raise ValueError("Zadejte pouze ciselne znaky")
 
 
 # ------------------------------------------------------------------------------------------------------------------
@@ -155,9 +220,9 @@ print(vINF, "with infinity values")
 v2_Opposite = Vector.OppositeVector(v2)
 print("Opposite vector to", v2, " is:", v2_Opposite)
 
+
 a = Vector(1, 2, 0)
 b = Vector(2, 4, 0)
 
 r = Rectangle(a.x, a.y, b.x, b.y)
-
 r.Area()
