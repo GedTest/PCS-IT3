@@ -150,7 +150,7 @@ class Vector:
     def z(self):
         return self.__z
 
-    @x.setter
+    @z.setter
     def z(self, value):
         try:
             if value == Vector.__INF:
