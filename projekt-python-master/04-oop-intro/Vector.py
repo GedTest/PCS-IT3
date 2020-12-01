@@ -11,7 +11,11 @@ class Vector:
     __INF = float('Infinity')
 
     # constant for dot product results
-    DotProductResult = {-1: 'Opposite', 0: 'Perpendicular', 1: 'Identical'}
+    DOT_PRODUCT_RESULT = {
+        -1: 'Opposite',
+        0: 'Perpendicular',
+        1: 'Identical'
+    }
 
     def __init__(self, x, y, z):
         self.x = x
@@ -52,63 +56,63 @@ class Vector:
 
     # ----------------Methods----------------
     # calculate magnitude of Vector
-    def Length(self):
-        return sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)
+    def length(self):
+        return sqrt(self.x**2 + self.y**2 + self.z**2)
 
     # normalize Vector to unit length 1
-    def Normalized(self):
-        magnitude = self.Length()
+    def normalized(self):
+        magnitude = self.length()
         self.x /= magnitude
         self.y /= magnitude
         self.z /= magnitude
         return self
 
     # return angle between two Vectors
-    def Angle(self, other):
-        return cos((Vector.DotProduct(self, other) / self.Length() + other.Length()))
+    def angle(self, other):
+        return cos((Vector.dot_product(self, other) / self.length()+other.length()))
 
     # ---------------Static-Methods----------------
     # Negates all Vector's components
     @staticmethod
-    def OppositeVector(v):
+    def opposite_vector(v):
         return Vector(-v.x, -v.y, -v.z)
 
     @staticmethod
-    def DotProduct(a, b):
-        return a.x * b.x + a.y * b.y + a.z * b.z
+    def dot_product(a, b):
+        return (a.x*b.x) + (a.y*b.y) + (a.z*b.z)
 
     # ---------------Class-Methods----------------
     #     shortcut for creating common Vectors
     @classmethod
-    def NullVector(cls):
+    def null_vector(cls):
         return cls(0, 0, 0)
 
     @classmethod
-    def InfinityVector(cls):
+    def infinity_vector(cls):
         return cls(Vector.__INF, Vector.__INF, Vector.__INF)
 
     @classmethod
-    def UpVector(cls):
+    def up_vector(cls):
         return cls(0, 1, 0)
 
     @classmethod
-    def DownVector(cls):
+    def down_vector(cls):
         return cls(0, -1, 0)
 
     @classmethod
-    def RightVector(cls):
+    def right_vector(cls):
         return cls(1, 0, 0)
 
     @classmethod
-    def LeftVector(cls):
+    def left_vector(cls):
         return cls(-1, 0, 0)
 
     @classmethod
-    def ForwardVector(cls):
+    def forward_vector(cls):
         return cls(0, 0, 1)
 
     @classmethod
-    def BackVector(cls):
+    def back_vector(cls):
         return cls(0, 0, -1)
 
     # ---------------Set/Get-Methods----------------
@@ -119,7 +123,7 @@ class Vector:
     @x.setter
     def x(self, value):
         try:
-            if value == Vector.__INF:
+            if value is Vector.__INF:
                 self.__x = Vector.__INF
 
             else:
@@ -136,7 +140,7 @@ class Vector:
     @y.setter
     def y(self, value):
         try:
-            if value == Vector.__INF:
+            if value is Vector.__INF:
                 self.__y = Vector.__INF
 
             else:
@@ -153,7 +157,7 @@ class Vector:
     @z.setter
     def z(self, value):
         try:
-            if value == Vector.__INF:
+            if value is Vector.__INF:
                 self.__z = Vector.__INF
 
             else:
@@ -163,18 +167,19 @@ class Vector:
         except ValueError:
             raise ValueError("Zadejte pouze ciselne znaky")
 
+
 class Rectangle(Vector):
     def __init__(self, x, y, z, w):
         super().__init__(x, y, z)
         self.w = w
         # obdelnik XYZW
 
-    def Area(self):
-        XY = Vector(self.x, self.y, 0).Length()
-        YZ = Vector(self.z, self.w, 0).Length()
+    def area(self):
+        xy = Vector(self.x, self.y, 0).length()
+        yz = Vector(self.z, self.w, 0).length()
 
-        #S = a * b
-        S = (XY * YZ)
+        # S = a * b
+        S = (xy * yz)
         print("Area S = ", round(S, 2), "cm.")
 
     @property
@@ -199,30 +204,30 @@ print(v1)
 print(type(v1))
 print("Is v1 an instance of vector? ", isinstance(v1, Vector))
 
-right = Vector.RightVector()
-up = Vector.UpVector()
+right = Vector.right_vector()
+up = Vector.up_vector()
 
 print(f'\nRight: {right} and up: {up}\n'
-      f'Dot product of {right} and {up} is: {Vector.DotProductResult[Vector.DotProduct(right, up)]}\n'
-      f'Normalized {v1} = {v1.Normalized()} of length: {v1.Length()}')
+      f'Dot product of {right} and {up} is: {Vector.DOT_PRODUCT_RESULT[Vector.dot_product(right, up)]}\n'
+      f'Normalized {v1} = {v1.normalized()} of length: {v1.length()}')
 
 v2 = Vector(4, 2, 5)
 v3 = Vector(1, 2, 7)
 v4 = v3
 print(f'\nOperators:\n'
-      f'(v3**2 == v4 * v3) is {v3**2 == v4 * v3}\n'
+      f'(v3**2 == v4 * v3) is {v3**2 == v4*v3}\n'
       f'v2 + v4 = {v2 + v4}\n'
       f'v2 - v4 = {v2 - v4}\n')
 
-vINF = Vector.InfinityVector()
-print(vINF, "with infinity values")
+inf_vector = Vector.infinity_vector()
+print(inf_vector, "with infinity values")
 
-v2_Opposite = Vector.OppositeVector(v2)
-print("Opposite vector to", v2, " is:", v2_Opposite)
+v2_opposite = Vector.opposite_vector(v2)
+print("Opposite vector to", v2, " is:", v2_opposite)
 
 
 a = Vector(1, 2, 0)
 b = Vector(2, 4, 0)
 
 r = Rectangle(a.x, a.y, b.x, b.y)
-r.Area()
+r.area()
