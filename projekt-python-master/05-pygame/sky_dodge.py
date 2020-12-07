@@ -116,6 +116,7 @@ collision_sound = pygame.mixer.Sound("sound/Boom.ogg")
 move_up_sound.set_volume(0.3)
 move_down_sound.set_volume(0.3)
 
+start_time = pygame.time.get_ticks()
 
 running = True
 
@@ -146,12 +147,24 @@ while running:
     enemies.update()
     clouds.update()
 
+    # get time since the start of game
+    seconds = round((pygame.time.get_ticks() - start_time) / 1000, 2)
+
+    r = 100 - seconds*2.75
+    g = 100 - seconds*2.75
+    b = 255 - seconds*2.75
+
     # Fill the screen with white color
-    screen.fill((100, 100, 255))
+    screen.fill((r, g, b))
 
     # Draw surface on the screen
     for entity in all_sprites:
         screen.blit(entity.surf, entity.rect)
+
+
+    # display a timer on the screen
+    font = pygame.font.SysFont('Consolas', 30)
+    screen.blit(font.render(str(seconds), True, (255, 0, 0)), (32, 48))
 
     # Check if any enemies have collided with the player
     if pygame.sprite.spritecollideany(player, enemies):
