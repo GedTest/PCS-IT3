@@ -23,13 +23,15 @@ class Player(pygame.sprite.Sprite):
 
     def update(self, pressed_keys):
         if pressed_keys[K_UP]:
-            self.rect.move_ip(0, -1)
+            self.rect.move_ip(0, -5)
+            move_up_sound.play()
         if pressed_keys[K_DOWN]:
-            self.rect.move_ip(0, 1)
+            self.rect.move_ip(0, 5)
+            move_down_sound.play()
         if pressed_keys[K_LEFT]:
-            self.rect.move_ip(-1, 0)
+            self.rect.move_ip(-5, 0)
         if pressed_keys[K_RIGHT]:
-            self.rect.move_ip(1, 0)
+            self.rect.move_ip(5, 0)
 
         # Keep player on the screen
         if self.rect.left < 0:
@@ -53,7 +55,7 @@ class Enemy(pygame.sprite.Sprite):
                 random.randint(0, SCREEN_HEIGHT),
             )
         )
-        self.speed = random.randint(1, 1)
+        self.speed = random.randint(2, 6)
 
     def update(self):
         self.rect.move_ip(-self.speed, 0)
@@ -78,8 +80,12 @@ class Cloud(pygame.sprite.Sprite):
         if self.rect.right < 0:
             self.kill()
 
+# Audio
+pygame.mixer.init()
+
 pygame.init()
 
+clock = pygame.time.Clock()
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
@@ -87,7 +93,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 ADDENEMY = pygame.USEREVENT + 1
 pygame.time.set_timer(ADDENEMY, 250)  # in miliseconds
 ADDCLOUD = pygame.USEREVENT + 2
-pygame.time.set_timer(ADDCLOUD, 1000)
+pygame.time.set_timer(ADDCLOUD, 5000)
 
 player = Player()
 
@@ -96,6 +102,20 @@ enemies = pygame.sprite.Group()
 clouds = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
 all_sprites.add(player)
+
+# Add music
+pygame.mixer.music.load("sound/Sky_dodge_theme.ogg")
+pygame.mixer.music.play(loops=-1)
+pygame.mixer.music.set_volume(0.15)
+
+# load sound files
+move_up_sound = pygame.mixer.Sound("sound/Jet_up.ogg")
+move_down_sound = pygame.mixer.Sound("sound/Jet_down.ogg")
+collision_sound = pygame.mixer.Sound("sound/Boom.ogg")
+
+move_up_sound.set_volume(0.3)
+move_down_sound.set_volume(0.3)
+
 
 running = True
 
@@ -136,6 +156,22 @@ while running:
     # Check if any enemies have collided with the player
     if pygame.sprite.spritecollideany(player, enemies):
         player.kill()
+
+        #screen stop any moving sounds
+        move_up_sound.stop()
+        move_down_sound.stop()
+        pygame.mixer.music.stop()
+
+        pygame.time.delay(50)
+        collision_sound.play()
+        pygame.time.delay(500)
+
+        # Stop the loop
         running = False
 
     pygame.display.flip()
+
+    clock.tick(30) # 30 FPS
+
+# stop music here
+pygame.mixer.quit()
