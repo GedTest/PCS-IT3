@@ -1,0 +1,12 @@
+asgiref==3.3.1
+database-manager==0.1.0
+databasetools==1.4.6
+differentiate==1.2.2
+dirutility==0.7.20
+Django==3.1.7
+looptools==1.2.4
+mysql-connector==2.2.9
+mysql-toolkit==1.9.1
+pytz==2021.1
+sqlparse==0.4.1
+tqdm==4.57.0
